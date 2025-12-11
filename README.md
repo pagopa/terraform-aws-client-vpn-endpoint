@@ -1,5 +1,21 @@
 # template-tf-modules
 
+---
+## Repository Structure & Details (Auto-generated)
+
+### Scopo
+Modulo Client VPN Endpoint AWS.
+
+### Cartelle
+- `main.tf`: definizione risorse.
+- `examples/`: esempi di utilizzo.
+
+### Script
+Nessuno.
+
+### Workflow
+- `documentation.yaml`: generazione documentazione.
+
 Terraform module to create a Client VPN enpoint inside your VPC
 
 
