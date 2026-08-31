@@ -30,6 +30,7 @@ module "vpn" {
   endpoint_vpc_id            = module.vpc.vpc_id
   tls_subject_common_name    = "vpn.sandbox.pagopa.it"
   saml_provider_arn          = aws_iam_saml_provider.vpn.arn
+  self_service_portal        = "enabled"
 
   authorization_rules = {}
 
@@ -95,6 +96,7 @@ No modules.
 | <a name="input_endpoint_subnets"></a> [endpoint\_subnets](#input\_endpoint\_subnets) | List of IDs of endpoint subnets for network association | `list(string)` | n/a | yes |
 | <a name="input_endpoint_vpc_id"></a> [endpoint\_vpc\_id](#input\_endpoint\_vpc\_id) | VPC where the VPN will be connected. | `string` | n/a | yes |
 | <a name="input_saml_provider_arn"></a> [saml\_provider\_arn](#input\_saml\_provider\_arn) | The ARN of the IAM SAML identity provider. | `string` | `null` | no |
+| <a name="input_self_service_portal"></a> [self\_service\_portal](#input\_self\_service\_portal) | Whether the Client VPN self-service portal is enabled. | `string` | `"disabled"` | no |
 | <a name="input_tls_subject_common_name"></a> [tls\_subject\_common\_name](#input\_tls\_subject\_common\_name) | The common\_name for subject for which a certificate is being requested. RFC5280. Not used if certificate\_arn provided. | `string` | `null` | no |
 | <a name="input_tls_validity_period_hours"></a> [tls\_validity\_period\_hours](#input\_tls\_validity\_period\_hours) | Specifies the number of hours after initial issuing that the certificate will become invalid.  Not used if certificate\_arn provided. | `number` | `47400` | no |
 | <a name="input_transport_protocol"></a> [transport\_protocol](#input\_transport\_protocol) | The transport protocol to be used by the VPN session. | `string` | `"udp"` | no |

@@ -74,6 +74,7 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
   transport_protocol     = var.transport_protocol
   dns_servers            = var.use_vpc_internal_dns ? [cidrhost(data.aws_vpc.this.cidr_block, 2)] : var.dns_servers
   security_group_ids     = [aws_security_group.this.id]
+  self_service_portal    = var.self_service_portal
 
   dynamic "authentication_options" {
     for_each = var.saml_provider_arn == null ? [] : [true]
