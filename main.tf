@@ -77,7 +77,7 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
     content {
       type                           = "federated-authentication"
       saml_provider_arn              = var.saml_provider_arn
-      self_service_saml_provider_arn = var.self_service_portal == "enabled" ? coalesce(var.self_service_saml_provider_arn, var.saml_provider_arn) : null
+      self_service_saml_provider_arn = var.self_service_saml_provider_arn
     }
   }
 

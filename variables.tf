@@ -75,7 +75,7 @@ variable "saml_provider_arn" {
 }
 
 variable "self_service_saml_provider_arn" {
-  description = "The ARN of the IAM SAML identity provider for the Client VPN self-service portal. Defaults to saml_provider_arn when the portal is enabled and this value is not set."
+  description = "The ARN of a separate IAM SAML identity provider for the Client VPN self-service portal. Leave null to use saml_provider_arn. Changing this value replaces the Client VPN endpoint."
   type        = string
   default     = null
 }
