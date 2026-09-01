@@ -111,8 +111,8 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
 
   lifecycle {
     precondition {
-      condition     = var.self_service_portal != "enabled" || try(length(trimspace(coalesce(var.self_service_saml_provider_arn, var.saml_provider_arn))) > 0, false)
-      error_message = "saml_provider_arn or self_service_saml_provider_arn must be set when self_service_portal is enabled."
+      condition     = var.self_service_portal != "enabled" || try(length(trimspace(var.saml_provider_arn)) > 0, false)
+      error_message = "saml_provider_arn must be set when self_service_portal is enabled."
     }
   }
 }
