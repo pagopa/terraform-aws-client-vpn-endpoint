@@ -4,7 +4,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 4.10.0"
+      version = ">= 6.28.0"
     }
   }
 }
@@ -33,7 +33,7 @@ resource "aws_iam_saml_provider" "vpn" {
 
 module "vpc" {
   source                = "terraform-aws-modules/vpc/aws"
-  version               = "3.14.0"
+  version               = "6.7.2"
   name                  = "myvpc"
   cidr                  = "10.0.0.0/16"
   azs                   = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
