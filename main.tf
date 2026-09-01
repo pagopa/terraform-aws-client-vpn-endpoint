@@ -31,6 +31,7 @@ resource "aws_acm_certificate" "this" {
   }
 }
 
+#tfsec:ignore:aws-cloudwatch-log-group-customer-key
 resource "aws_cloudwatch_log_group" "this" {
   name              = join("", [var.cloudwatch_log_group_name_prefix, var.endpoint_name])
   retention_in_days = var.cloudwatch_log_group_retention_in_days
@@ -50,14 +51,19 @@ resource "aws_security_group" "this" {
   description = "Egress All. Used for other groups where VPN access is required. "
   vpc_id      = var.endpoint_vpc_id
 
+  # VPN clients connect from arbitrary public addresses
+  #tfsec:ignore:aws-ec2-no-public-ingress-sgr
   ingress {
+    description = "Client VPN tunnel from any client public IP"
     from_port   = 443
     to_port     = 443
     protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  #tfsec:ignore:aws-ec2-no-public-egress-sgr
   egress {
+    description = "Allow all outbound traffic from the VPN endpoint"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
