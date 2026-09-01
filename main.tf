@@ -31,6 +31,7 @@ resource "aws_acm_certificate" "this" {
   }
 }
 
+#tfsec:ignore:aws-cloudwatch-log-group-customer-key
 resource "aws_cloudwatch_log_group" "this" {
   name              = join("", [var.cloudwatch_log_group_name_prefix, var.endpoint_name])
   retention_in_days = var.cloudwatch_log_group_retention_in_days
@@ -50,14 +51,9 @@ resource "aws_security_group" "this" {
   description = "Egress All. Used for other groups where VPN access is required. "
   vpc_id      = var.endpoint_vpc_id
 
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "udp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
+  #tfsec:ignore:aws-ec2-no-public-egress-sgr
   egress {
+    description = "Allow all outbound traffic from the VPN endpoint"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -74,12 +70,14 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
   transport_protocol     = var.transport_protocol
   dns_servers            = var.use_vpc_internal_dns ? [cidrhost(data.aws_vpc.this.cidr_block, 2)] : var.dns_servers
   security_group_ids     = [aws_security_group.this.id]
+  self_service_portal    = var.self_service_portal
 
   dynamic "authentication_options" {
     for_each = var.saml_provider_arn == null ? [] : [true]
     content {
-      type              = "federated-authentication"
-      saml_provider_arn = var.saml_provider_arn
+      type                           = "federated-authentication"
+      saml_provider_arn              = var.saml_provider_arn
+      self_service_saml_provider_arn = var.self_service_saml_provider_arn
     }
   }
 
@@ -99,6 +97,13 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
 
   tags = {
     Name = var.endpoint_name
+  }
+
+  lifecycle {
+    precondition {
+      condition     = var.self_service_portal != "enabled" || try(length(trimspace(var.saml_provider_arn)) > 0, false)
+      error_message = "saml_provider_arn must be set when self_service_portal is enabled."
+    }
   }
 }
 

@@ -31,6 +31,7 @@ esac
 
 function terraform_init(){
   folder="$1"
+  repo_root="$(pwd)"
 
   if [ -d "$folder" ]; then
     echo "🔬 folder: $folder in under terraform: $ACTION action $MODE mode"
@@ -44,7 +45,8 @@ function terraform_init(){
 
     case "${MODE}" in
       docker*)
-        docker run -v "$(pwd):/tmp" -w /tmp "hashicorp/terraform:$TAG" "$ACTION"
+        # mount the repo root so that parent modules referenced as "../" are visible
+        docker run -v "$repo_root:/tmp" -w "/tmp/$folder" "hashicorp/terraform:$TAG" "$ACTION"
       ;;
       local*)
         terraform "$ACTION"
