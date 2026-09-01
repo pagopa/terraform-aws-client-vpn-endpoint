@@ -51,16 +51,6 @@ resource "aws_security_group" "this" {
   description = "Egress All. Used for other groups where VPN access is required. "
   vpc_id      = var.endpoint_vpc_id
 
-  # VPN clients connect from arbitrary public addresses
-  #tfsec:ignore:aws-ec2-no-public-ingress-sgr
-  ingress {
-    description = "Client VPN tunnel from any client public IP"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "udp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   #tfsec:ignore:aws-ec2-no-public-egress-sgr
   egress {
     description = "Allow all outbound traffic from the VPN endpoint"
@@ -87,7 +77,7 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
     content {
       type                           = "federated-authentication"
       saml_provider_arn              = var.saml_provider_arn
-      self_service_saml_provider_arn = coalesce(var.self_service_saml_provider_arn, var.saml_provider_arn)
+      self_service_saml_provider_arn = var.self_service_saml_provider_arn
     }
   }
 
