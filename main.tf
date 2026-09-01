@@ -85,8 +85,9 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
   dynamic "authentication_options" {
     for_each = var.saml_provider_arn == null ? [] : [true]
     content {
-      type              = "federated-authentication"
-      saml_provider_arn = var.saml_provider_arn
+      type                           = "federated-authentication"
+      saml_provider_arn              = var.saml_provider_arn
+      self_service_saml_provider_arn = coalesce(var.self_service_saml_provider_arn, var.saml_provider_arn)
     }
   }
 
@@ -106,6 +107,13 @@ resource "aws_ec2_client_vpn_endpoint" "this" {
 
   tags = {
     Name = var.endpoint_name
+  }
+
+  lifecycle {
+    precondition {
+      condition     = var.self_service_portal != "enabled" || try(length(trimspace(coalesce(var.self_service_saml_provider_arn, var.saml_provider_arn))) > 0, false)
+      error_message = "saml_provider_arn or self_service_saml_provider_arn must be set when self_service_portal is enabled."
+    }
   }
 }
 
