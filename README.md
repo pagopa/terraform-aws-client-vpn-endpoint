@@ -23,7 +23,7 @@ Terraform module to create a Client VPN enpoint inside your VPC
 
 ```hcl
 module "vpn" {
-  source                     = "git::https://github.com/pagopa/terraform-aws-client-vpn-endpoint.git?ref=v1.0.2"
+  source                     = "git::https://github.com/pagopa/terraform-aws-client-vpn-endpoint.git"
   endpoint_name              = "vpn"
   endpoint_client_cidr_block = "10.100.0.0/22"
   endpoint_subnets           = [module.vpc.private_subnets[0]] # Attach VPN to single subnet. Reduce cost
