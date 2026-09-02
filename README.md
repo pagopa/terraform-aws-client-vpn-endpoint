@@ -108,5 +108,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_aws_ec2_client_vpn_endpoint"></a> [aws\_ec2\_client\_vpn\_endpoint](#output\_aws\_ec2\_client\_vpn\_endpoint) | n/a |
 | <a name="output_dns_name"></a> [dns\_name](#output\_dns\_name) | n/a |
 <!-- END_TF_DOCS -->
